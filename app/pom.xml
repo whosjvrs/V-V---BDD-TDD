@@ -1,0 +1,74 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 https://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+
+    <parent>
+        <groupId>br.pucpr.tocktock</groupId>
+        <artifactId>tocktock</artifactId>
+        <version>1.0-SNAPSHOT</version>
+    </parent>
+
+    <artifactId>app</artifactId>
+    <name>TockTock - Aplicativo (JavaFX)</name>
+
+    <properties>
+        <javafx.version>21.0.5</javafx.version>
+    </properties>
+
+    <dependencies>
+        <!-- Interface gráfica -->
+        <dependency>
+            <groupId>org.openjfx</groupId>
+            <artifactId>javafx-controls</artifactId>
+            <version>${javafx.version}</version>
+        </dependency>
+
+        <!-- A lógica de cada integrante. Já está tudo declarado aqui:
+             ninguém precisa mexer neste pom para ligar a sua aba. -->
+        <dependency>
+            <groupId>br.pucpr.tocktock</groupId>
+            <artifactId>F01-F02-luiz-dias</artifactId>
+            <version>${project.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>br.pucpr.tocktock</groupId>
+            <artifactId>F03-F04-luiz-fernando-simm</artifactId>
+            <version>${project.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>br.pucpr.tocktock</groupId>
+            <artifactId>F05-F06-tabatha-martins</artifactId>
+            <version>${project.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>br.pucpr.tocktock</groupId>
+            <artifactId>F07-F08-joao-reis</artifactId>
+            <version>${project.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>br.pucpr.tocktock</groupId>
+            <artifactId>F09-F10-geovana-vincensi</artifactId>
+            <version>${project.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>br.pucpr.tocktock</groupId>
+            <artifactId>F11-F12-rafael-sato</artifactId>
+            <version>${project.version}</version>
+        </dependency>
+    </dependencies>
+
+    <build>
+        <plugins>
+            <plugin>
+                <groupId>org.openjfx</groupId>
+                <artifactId>javafx-maven-plugin</artifactId>
+                <version>0.0.8</version>
+                <configuration>
+                    <mainClass>br.pucpr.tocktock.app.TockTockApp</mainClass>
+                </configuration>
+            </plugin>
+        </plugins>
+    </build>
+</project>

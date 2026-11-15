@@ -18,6 +18,8 @@
         <module>F07-F08-joao-reis</module>
         <module>F09-F10-geovana-vincensi</module>
         <module>F11-F12-rafael-sato</module>
+        <!-- Interface JavaFX: depende dos módulos acima -->
+        <module>app</module>
     </modules>
 
     <properties>

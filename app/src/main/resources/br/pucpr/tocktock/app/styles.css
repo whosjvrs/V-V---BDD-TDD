@@ -1,0 +1,56 @@
+.root {
+    -fx-font-family: "System";
+    -fx-font-size: 13px;
+    -fx-background-color: #F6F4F1;
+}
+
+.cabecalho {
+    -fx-background-color: #1F6F78;
+}
+
+.marca {
+    -fx-text-fill: white;
+    -fx-font-size: 24px;
+    -fx-font-weight: bold;
+}
+
+.subtitulo {
+    -fx-text-fill: #D7ECEE;
+}
+
+.conteudo {
+    -fx-padding: 24;
+    -fx-background-color: #F6F4F1;
+}
+
+.titulo-aba {
+    -fx-font-size: 18px;
+    -fx-font-weight: bold;
+    -fx-text-fill: #1E2A2C;
+}
+
+.cartao {
+    -fx-background-color: white;
+    -fx-background-radius: 8;
+    -fx-border-color: #E2DDD6;
+    -fx-border-radius: 8;
+    -fx-padding: 16;
+}
+
+.cartao-titulo {
+    -fx-font-weight: bold;
+    -fx-text-fill: #1E2A2C;
+}
+
+.texto-secundario {
+    -fx-text-fill: #5B6668;
+}
+
+.selo {
+    -fx-background-color: #F0CDA1;
+    -fx-background-radius: 10;
+    -fx-padding: 3 10 3 10;
+    -fx-font-size: 11px;
+    -fx-font-weight: bold;
+    -fx-text-fill: #6B4A1F;
+}

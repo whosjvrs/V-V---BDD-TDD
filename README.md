@@ -3,7 +3,7 @@
 Gerenciador de tarefas (to-do list) com calendário, desenvolvido com **BDD** e **TDD** para a
 **Avaliação Somativa RA4 – Parte 1** de Verificação e Validação (PUCPR – Engenharia de Software, 2026/2 – Prof. Marcelo Bardi).
 
-**Stack:** Java 17+ · Maven · JUnit 5 (TDD) · Cucumber (BDD)
+**Stack:** Java 17+ · Cucumber (BDD)
 
 ---
 

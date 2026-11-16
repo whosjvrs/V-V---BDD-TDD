@@ -1,0 +1,3 @@
+Nesta Etapa os testes para as Features 03 e 04 foram criados em gherkin e em scripts automatizados
+utilizando cucumber, após a criação eles foram executados em NoCode ou seja sem a implementação
+das features, assim então retornando falha como é possível visualizar na imagem RED1.png

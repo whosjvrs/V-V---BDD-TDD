@@ -14,6 +14,9 @@ OPCOES_TAREFA = []
 # Funções (app) -> list[str] com linhas extras no topo da tela inicial (ex.: "Filtro: Alta").
 LINHAS_INICIO = []
 
+# Funções (tarefa) -> list[str] com detalhes exibidos na tela da tarefa.
+LINHAS_TAREFA = []
+
 # Funções (tarefas, app) -> tarefas. Ordenam ou filtram a lista da tela inicial.
 VISOES = []
 
@@ -52,6 +55,11 @@ def opcao_tarefa(funcao):
 
 def linhas_inicio(funcao):
     LINHAS_INICIO.append(funcao)
+    return funcao
+
+
+def linhas_tarefa(funcao):
+    LINHAS_TAREFA.append(funcao)
     return funcao
 
 

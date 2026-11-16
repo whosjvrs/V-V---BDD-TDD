@@ -73,7 +73,10 @@ for caminho in "${CAMINHOS[@]}"; do
 done
 
 # Compila os steps comuns + os das pastas envolvidas.
-mapfile -t FONTES < <(find comum "${PASTAS[@]}" -name '*.java' -not -path '*/build/*' | sort)
+FONTES=()
+while IFS= read -r fonte; do
+  FONTES+=("$fonte")
+done < <(find comum "${PASTAS[@]}" -name '*.java' -not -path '*/build/*' | sort)
 rm -rf "$CLASSES"
 mkdir -p "$CLASSES"
 javac -encoding UTF-8 -cp "$LIB/*" -d "$CLASSES" "${FONTES[@]}"

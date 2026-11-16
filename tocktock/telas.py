@@ -72,6 +72,9 @@ class TelaTarefa(Tela):
         super().__init__(app)
         self.tarefa = tarefa
 
+    def linhas(self):
+        return [linha for fonte in ext.LINHAS_TAREFA for linha in fonte(self.tarefa)]
+
     def opcoes(self):
         return ext.juntar_opcoes(ext.OPCOES_TAREFA, self)
 

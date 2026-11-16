@@ -34,3 +34,24 @@ se pode ver na evidência F11-F12-green.png:
 
   7 scenarios (7 passed)
   50 steps (50 passed)
+
+
+F11 e F12 - REFACTOR
+
+Com os testes passando, organizei o código. As mensagens viraram constantes, a
+validação do nome foi para uma função própria e a tarefa passou a guardar a
+lista a que pertence em tarefa.campos["lista"], como o README pede para os
+dados extras de cada funcionalidade.
+
+Também melhorei um pouco o app: as telas de nome agora dizem o que digitar, a
+tela da lista tem a opção "Voltar", mostra quantas tarefas tem e a data de
+cada uma, e dá pra abrir uma tarefa pelo número. O nome da lista não diferencia
+maiúsculas ("faculdade" conta como repetido de "Faculdade"), espaços nas
+pontas são ignorados, entrar numa lista que não existe mostra erro e a opção
+"Entrar em lista" só aparece quando já tem alguma lista.
+
+Rodei ./cucumber.sh F11-F12-rafael-sato de novo e os 7 cenários continuaram
+passando, como se pode ver na evidência F11-F12-refactor-1.png:
+
+  7 scenarios (7 passed)
+  50 steps (50 passed)

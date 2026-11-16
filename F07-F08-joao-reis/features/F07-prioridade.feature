@@ -8,8 +8,7 @@ Funcionalidade: F07 - Prioridade da tarefa
   - As prioridades possíveis são "Baixa", "Média" e "Alta"
   - Tarefa criada sem prioridade recebe "Média"
   - Qualquer outro valor de prioridade é rejeitado
-  - Não é possível alterar a prioridade de uma tarefa concluída
-  - As tarefas podem ser ordenadas e filtradas por prioridade
+  - As tarefas podem ser ordenadas da maior para a menor prioridade (Alta, Média, Baixa)
 
   Cenário: Tarefa criada sem prioridade recebe prioridade "Média"
     Dado que a tarefa "Estudar V&V" seja criada sem informar a prioridade
@@ -27,17 +26,20 @@ Funcionalidade: F07 - Prioridade da tarefa
       | Pagar boleto | Média      |
       | Entregar RA4 | Alta       |
 
-  Cenário: Alterar a prioridade de uma tarefa
-    Dado que existe a tarefa "Pagar boleto" com prioridade "Baixa"
-    E que a prioridade da tarefa "Pagar boleto" seja alterada para "Alta"
-    Quando eu clicar no botão de salvar
-    Então a tarefa "Pagar boleto" deve ter prioridade "Alta"
+  Cenário: Rejeitar prioridade inválida ao criar uma tarefa
+    Dado que a tarefa "Estudar V&V" seja criada com prioridade "Urgente"
+    Quando eu clicar no botão de criar tarefa
+    Então o sistema deve exibir o erro "Prioridade inválida. Use Baixa, Média ou Alta."
+    E a tarefa "Estudar V&V" não deve ser criada
 
-  Cenário: Não permitir alterar a prioridade de uma tarefa concluída
-    Dado que existe a tarefa "Pagar boleto" com prioridade "Baixa"
-    E que a tarefa "Pagar boleto" esteja concluída
-    E que a prioridade da tarefa "Pagar boleto" seja alterada para "Alta"
-    Quando eu clicar no botão de salvar
-    Então o sistema deve exibir o erro "Não é possível alterar a prioridade de uma tarefa concluída"
-    E a tarefa "Pagar boleto" deve ter prioridade "Baixa"
-
+  Cenário: Listar tarefas ordenadas da maior para a menor prioridade
+    Dado que existem as tarefas:
+      | titulo       | prioridade |
+      | Lavar louça  | Baixa      |
+      | Entregar RA4 | Alta       |
+      | Pagar boleto | Média      |
+    Quando eu clicar no botão de ordenar por prioridade
+    Então as tarefas devem aparecer na ordem:
+      | Entregar RA4 |
+      | Pagar boleto |
+      | Lavar louça  |

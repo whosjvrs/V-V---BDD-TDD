@@ -59,7 +59,7 @@ python3 -m tocktock                      # abre o app no terminal
 ```
 
 Na primeira execução o script baixa as bibliotecas do Cucumber para `build/lib/`.
-O relatório HTML fica em `build/relatorio-cucumber.html` (bom para os prints).
+O resultado aparece no terminal (formato `pretty`), bom para os prints.
 
 ---
 

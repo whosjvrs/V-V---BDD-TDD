@@ -5,8 +5,7 @@
 #   ./cucumber.sh F07-F08-joao-reis        só uma pasta (pode passar várias)
 #   ./cucumber.sh F07-F08-joao-reis/features/F07-prioridade.feature
 #
-# Compila os steps de comum/ e das pastas escolhidas e gera também o
-# relatório HTML em build/relatorio-cucumber.html.
+# Compila os steps de comum/ e das pastas escolhidas.
 set -euo pipefail
 cd "$(dirname "$0")"
 
@@ -88,6 +87,5 @@ done
 java -cp "$LIB/*:$CLASSES" io.cucumber.core.cli.Main \
   "${GLUE[@]}" \
   --plugin pretty \
-  --plugin html:build/relatorio-cucumber.html \
   "${OPCOES[@]+"${OPCOES[@]}"}" \
   "${CAMINHOS[@]}"

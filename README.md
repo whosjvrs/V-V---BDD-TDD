@@ -139,7 +139,7 @@ Veja o exemplo completo em `F01-F02-luiz-dias/app/f0102_criar_editar.py`.
 
 | Item | Convenção |
 |---|---|
-| Teclas usadas | Início: `N` (F01). Tarefa: `E` (F02). Combine no grupo antes de usar uma tecla nova; o app acusa tecla repetida. |
+| Teclas usadas | Início: `N` (F01), `O` e `P` (F07). Tarefa: `E` (F02). Formulário: `1`, `2`, campos extras numerados, `S` Salvar, `X` Cancelar. Combine no grupo antes de usar uma tecla nova; o app acusa tecla repetida. |
 | Status de conclusão (F05) | `tarefa.campos["concluida"]` (`True`/`False`). F07 e F08 leem esse campo. |
 | Datas | Texto no formato `dd/mm/aaaa`, como no F01. |
 

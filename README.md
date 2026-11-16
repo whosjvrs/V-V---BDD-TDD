@@ -1,5 +1,17 @@
 # TockTock
 
+> **Professor, comece por aqui.** Guia rápido da entrega (Avaliação Somativa RA4 – Parte 1):
+>
+> | O que a atividade pede | Onde está |
+> |---|---|
+> | **Casos de teste (BDD)** | `<pasta do integrante>/features/*.feature` (Gherkin, Dado/Quando/Então) |
+> | **Relatório dos passos do TDD** | `RELATORIO-TDD.txt` (raiz), com as imagens em `<pasta do integrante>/evidencias/` |
+> | **Códigos gerados** | App: `tocktock/` (núcleo) + `<pasta do integrante>/app/*.py` · Testes: `<pasta do integrante>/steps/*.java` + `comum/steps/` |
+>
+> **Para executar:** `python3 -m tocktock` abre o app no terminal; `./cucumber.sh` roda todos os cenários
+> (ou `./cucumber.sh F07-F08-joao-reis` para uma pasta). Requer Python 3.10+, Java 17+ e Bash.
+> O histórico do Git (`git log`) mostra os commits de cada etapa (cenários → RED → GREEN → REFACTOR).
+
 Gerenciador de tarefas **no terminal**, desenvolvido com **BDD** e **TDD** para a
 **Avaliação Somativa RA4 – Parte 1** de Verificação e Validação (PUCPR – Engenharia de Software, 2026/2 – Prof. Marcelo Bardi).
 

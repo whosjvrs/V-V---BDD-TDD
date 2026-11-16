@@ -108,6 +108,7 @@ class TelaFormulario(Tela):
             opcoes[str(numero)] = (
                 campo.rotulo, lambda campo=campo: self.perguntar(campo.chave, campo.pergunta))
         opcoes["S"] = ("Salvar", self.salvar)
+        opcoes["X"] = ("Cancelar", self.app.voltar_ao_inicio)
         return opcoes
 
     def perguntar(self, campo, pergunta):

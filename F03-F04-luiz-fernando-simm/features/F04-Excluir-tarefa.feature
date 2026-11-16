@@ -11,3 +11,4 @@ Funcionalidade: F04 - Excluir tarefa
     Quando o usuário clicar na tarefa "Regar Plantas"
     E clicar na opção "Excluir tarefa"
     Então a tarefa "Regar Plantas" não deverá mais aparecer na lista de tarefas
+

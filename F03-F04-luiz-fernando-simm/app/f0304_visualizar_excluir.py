@@ -2,10 +2,9 @@
 from tocktock import extensoes as ext
 
 
-@ext.opcao_tarefa
-def visualizar_tarefa(tela):
-    tarefa = tela.tarefa
-    return {"V": (f"Dados da tarefa: {tarefa.nome} | {tarefa.data}", lambda: None)}
+@ext.linhas_tarefa
+def visualizar_tarefa(tarefa):
+    return [f"Nome: {tarefa.nome}", f"Data: {tarefa.data}"]
 
 
 @ext.opcao_tarefa

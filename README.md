@@ -129,6 +129,7 @@ Registre o que a sua funcionalidade precisa em `tocktock.extensoes`:
 | `@ext.coluna` | `(tarefa)` → texto extra na linha da lista (`1. Nome \| data \| Alta`) |
 | `@ext.visao` | `(tarefas, app)` → ordena ou filtra a lista da tela inicial |
 | `@ext.linhas_inicio` | `(app)` → linhas extras no topo da tela inicial (ex.: `Filtro: Alta`) |
+| `@ext.linhas_tarefa` | `(tarefa)` → linhas de dados na tela da tarefa |
 | `@ext.apos_salvar` | `(tarefa, app)` → executa algo depois de salvar |
 
 Os dados extras de cada tarefa ficam em `tarefa.campos` (ex.: `tarefa.campos["prioridade"]`).

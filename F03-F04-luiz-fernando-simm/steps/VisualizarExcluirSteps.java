@@ -42,7 +42,7 @@ public class VisualizarExcluirSteps {
     @Então("a tarefa {string} tem seus dados exibidos na tela")
     public void verificarDetalhes(String nome) {
         String tela = contexto.terminal.tela();
-        garantir(tela.contains(nome) && tela.contains("15/11/2026"),
+        garantir(tela.contains("Nome: " + nome) && tela.contains("Data: 15/11/2026"),
                 "os detalhes devem mostrar nome e data da tarefa:\n" + tela);
     }
 

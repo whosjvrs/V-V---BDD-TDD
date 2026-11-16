@@ -1,0 +1,4 @@
+Nesta etapa a feature foi refatorada (REFACTOR2.png), foi ajustado a exibição dos dados da tarefa que
+estavam apenas aparencendo na frente de [v] que era um opção sem funcionalidade, agora ela aparecem
+separada do bloco de opções da interface, o botão de excluir segue no mesmo padrão (REFACTOR1.png),
+os testes seguem sendo aprovados normalmente (REFACTOR3.png).

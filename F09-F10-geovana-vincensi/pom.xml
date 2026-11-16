@@ -12,4 +12,8 @@
 
     <artifactId>F09-F10-geovana-vincensi</artifactId>
     <name>F09-F10 - Geovana Vincensi</name>
+    <properties>
+        <maven.compiler.source>17</maven.compiler.source>
+        <maven.compiler.target>17</maven.compiler.target>
+    </properties>
 </project>

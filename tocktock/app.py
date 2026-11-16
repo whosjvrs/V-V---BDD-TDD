@@ -1,9 +1,13 @@
+from tocktock.funcionalidades import carregar
 from tocktock.telas import TelaInicio
 
 
 class App:
     def __init__(self, gerenciador):
+        carregar()
         self.gerenciador = gerenciador
+        # Estado compartilhado das telas (ex.: filtro ativo). Use chaves com o código da funcionalidade.
+        self.estado = {}
         self.tela_atual = TelaInicio(self)
 
     @property

@@ -1,4 +1,12 @@
 #!/usr/bin/env bash
+# Roda os cenários BDD (Cucumber) contra o app TockTock no terminal.
+#
+#   ./cucumber.sh                          todas as pastas de integrantes
+#   ./cucumber.sh F07-F08-joao-reis        só uma pasta (pode passar várias)
+#   ./cucumber.sh F07-F08-joao-reis/features/F07-prioridade.feature
+#
+# Compila os steps de comum/ e das pastas escolhidas e gera também o
+# relatório HTML em build/relatorio-cucumber.html.
 set -euo pipefail
 cd "$(dirname "$0")"
 
@@ -45,13 +53,41 @@ for dependencia in "${DEPENDENCIAS[@]}"; do
   fi
 done
 
-CAMINHOS=(features)
+# O que rodar: argumentos (pastas ou arquivos .feature) ou todas as pastas F*-F*-*.
+CAMINHOS=()
+OPCOES=()
 for argumento in "$@"; do
   case "$argumento" in
-    features/*) CAMINHOS=() ;;
+    -*) OPCOES+=("$argumento") ;;
+    *) CAMINHOS+=("${argumento%/}") ;;
   esac
 done
+if [ ${#CAMINHOS[@]} -eq 0 ]; then
+  for pasta in F*-F*-*/; do CAMINHOS+=("${pasta%/}"); done
+fi
 
+# Pastas de integrantes envolvidas (o primeiro nível de cada caminho).
+PASTAS=()
+for caminho in "${CAMINHOS[@]}"; do
+  pasta="${caminho%%/*}"
+  [[ " ${PASTAS[*]-} " == *" $pasta "* ]] || PASTAS+=("$pasta")
+done
+
+# Compila os steps comuns + os das pastas envolvidas.
+mapfile -t FONTES < <(find comum "${PASTAS[@]}" -name '*.java' -not -path '*/build/*' | sort)
 rm -rf "$CLASSES"
-javac -encoding UTF-8 -cp "$LIB/*" -d "$CLASSES" steps/*.java
-java -cp "$LIB/*:$CLASSES" io.cucumber.core.cli.Main --glue steps --plugin pretty "${CAMINHOS[@]}" "$@"
+mkdir -p "$CLASSES"
+javac -encoding UTF-8 -cp "$LIB/*" -d "$CLASSES" "${FONTES[@]}"
+
+# Cada pacote de primeiro nível compilado vira um --glue (comum, f0102, f0708, ...).
+GLUE=()
+for pacote in "$CLASSES"/*/; do
+  GLUE+=(--glue "$(basename "$pacote")")
+done
+
+java -cp "$LIB/*:$CLASSES" io.cucumber.core.cli.Main \
+  "${GLUE[@]}" \
+  --plugin pretty \
+  --plugin html:build/relatorio-cucumber.html \
+  "${OPCOES[@]+"${OPCOES[@]}"}" \
+  "${CAMINHOS[@]}"

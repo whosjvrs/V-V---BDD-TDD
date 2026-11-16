@@ -1,9 +1,11 @@
 # TockTock
 
-Gerenciador de tarefas (to-do list) com calendário, desenvolvido com **BDD** e **TDD** para a
+Gerenciador de tarefas **no terminal**, desenvolvido com **BDD** e **TDD** para a
 **Avaliação Somativa RA4 – Parte 1** de Verificação e Validação (PUCPR – Engenharia de Software, 2026/2 – Prof. Marcelo Bardi).
 
-**Stack:** Java 17+ · Cucumber (BDD)
+**Stack:** app em **Python 3** (terminal) · cenários BDD em **Gherkin** · steps em **Java 17+** com **Cucumber** (sem Maven, via `cucumber.sh`).
+
+Base do app e dos testes criada por Luiz Dias (repositório `ra4-verival`, histórico preservado aqui).
 
 ---
 
@@ -13,156 +15,156 @@ Gerenciador de tarefas (to-do list) com calendário, desenvolvido com **BDD** e 
 |---|---|---|---|---|
 | Luiz Dias | F01 – Criar tarefa | F02 – Editar tarefa | `luiz-dias` | `F01-F02-luiz-dias/` |
 | Luiz Fernando Simm | F03 – Visualizar tarefas | F04 – Excluir tarefa | `luiz-fernando-simm` | `F03-F04-luiz-fernando-simm/` |
-| Tabatha Martins | F05 – Status da tarefa (Concluída / Não concluída) | F06 – Status da tarefa (Farei / Não farei) | `tabatha-martins` | `F05-F06-tabatha-martins/` |
+| Tabatha Martins | F05 – Status (Concluída / Não concluída) | F06 – Status (Farei / Não farei) | `tabatha-martins` | `F05-F06-tabatha-martins/` |
 | João Victor dos Reis | F07 – Prioridade da tarefa | F08 – Tarefa recorrente | `joao-reis` | `F07-F08-joao-reis/` |
-| Geovana Vincensi | F09 – Exibição de tarefa no calendário | F10 – Filtro por período de datas | `geovana-vincensi` | `F09-F10-geovana-vincensi/` |
+| Geovana Vincensi | F09 – Exibição no calendário | F10 – Filtro por período de datas | `geovana-vincensi` | `F09-F10-geovana-vincensi/` |
 | Rafael Sato | F11 – Criar lista de tarefas | F12 – Entrar em lista de tarefas | `rafael-sato` | `F11-F12-rafael-sato/` |
 
 ---
 
-## Como o repositório funciona
-
-- A `main` já vem com **uma pasta para cada integrante**. Cada pasta é um módulo Maven independente.
-- Cada integrante trabalha **na sua branch** e **mexe só na sua pasta**.
-- No fim, cada branch volta para a `main` por Pull Request. Como ninguém mexe na pasta do outro, **não há conflito** e tudo fica junto e organizado.
+## Estrutura
 
 ```
-tocktock/
-├── pom.xml                      ← pom pai (dependências comuns) — não alterar na sua branch
-├── README.md
+V-V---BDD-TDD/
+├── cucumber.sh              ← roda os cenários (todos ou só os de uma pasta)
+├── tocktock/                ← NÚCLEO do app (ninguém edita na sua branch)
+│   ├── app.py, telas.py, tarefa.py, gerenciador.py
+│   ├── extensoes.py         ← pontos de extensão que cada funcionalidade usa
+│   └── funcionalidades.py   ← carrega automaticamente Fxx-Fyy-*/app/*.py
+├── comum/steps/             ← infraestrutura dos testes (Terminal, Contexto, steps genéricos)
 ├── F01-F02-luiz-dias/
-├── F03-F04-luiz-fernando-simm/
-├── F05-F06-tabatha-martins/
-├── F07-F08-joao-reis/           ← exemplo de uma pasta por dentro:
-│   ├── pom.xml
-│   ├── README.md
-│   ├── evidencias/                          ← prints de cada passo do TDD
-│   └── src/
-│       ├── main/java/br/pucpr/tocktock/f0708/       ← código de produção
-│       └── test/
-│           ├── java/br/pucpr/tocktock/f0708/
-│           │   ├── bdd/                             ← Step Definitions + RunCucumberTest
-│           │   └── tdd/                             ← testes unitários JUnit 5
-│           └── resources/features/                  ← cenários BDD (.feature)
-├── F09-F10-geovana-vincensi/
-└── F11-F12-rafael-sato/
+│   ├── features/            ← cenários .feature
+│   ├── steps/               ← step definitions em Java (pacote f0102)
+│   ├── app/                 ← código Python das SUAS funcionalidades
+│   └── evidencias/          ← prints de cada passo
+├── F03-F04-luiz-fernando-simm/   (mesma estrutura)
+└── ...
 ```
 
-O pacote de cada pasta segue o par de funcionalidades: `f0102`, `f0304`, `f0506`, `f0708`, `f0910`, `f1112`.
+**Regra de ouro:** cada integrante mexe **apenas na sua pasta**. O núcleo (`tocktock/`), `comum/` e
+`cucumber.sh` são compartilhados. Precisa mudar algo neles? Avise no grupo.
 
 ---
 
-## Primeiros passos (cada integrante)
+## Como rodar
+
+**Requisitos:** Python 3.10+, Java 17+, `curl` e Bash (Linux, macOS ou Git Bash no Windows).
 
 ```bash
-# 1. Clonar o repositório
-git clone <URL-DO-REPOSITORIO>
-cd tocktock
+python3 -m tocktock                      # abre o app no terminal
 
-# 2. Criar a sua branch a partir da main (use o nome da tabela)
-git checkout main
-git pull
-git checkout -b joao-reis
-
-# 3. Publicar a branch
-git push -u origin joao-reis
+./cucumber.sh                            # todos os cenários de todas as pastas
+./cucumber.sh F07-F08-joao-reis          # só os cenários de uma pasta
+./cucumber.sh F07-F08-joao-reis/features/F07-prioridade.feature   # um arquivo
 ```
 
-No **IntelliJ**: `File → Open` → selecione a pasta `tocktock` (a que tem o `pom.xml` pai) e abra como projeto Maven.
-Instale o plugin **Cucumber for Java** (`Settings → Plugins`) para ter destaque de sintaxe e navegação nos `.feature`.
+Na primeira execução o script baixa as bibliotecas do Cucumber para `build/lib/`.
+O relatório HTML fica em `build/relatorio-cucumber.html` (bom para os prints).
 
 ---
 
-## Fluxo de trabalho
+## Como criar a sua funcionalidade
 
-### 1. BDD — escreva os cenários primeiro
+### 1. Cenários (`features/`)
 
-Crie um arquivo por funcionalidade em `src/test/resources/features/`, por exemplo `F07-prioridade.feature`.
-Escreva em português, com `# language: pt` na **primeira linha**:
+Arquivos `.feature` em português (`# language: pt` na primeira linha) ou em inglês, sempre com **Dado / Quando / Então**.
 
-```gherkin
-# language: pt
-Funcionalidade: F07 - Prioridade da tarefa
-  Como usuário do TockTock
-  Quero definir a prioridade das minhas tarefas
-  Para saber o que fazer primeiro
+### 2. Step definitions (`steps/`)
 
-  Cenário: Tarefa criada sem prioridade recebe "Média"
-    Dado que eu crio a tarefa "Estudar V&V" sem informar prioridade
-    Quando eu consulto a tarefa
-    Então a prioridade da tarefa deve ser "Média"
+Classes Java no pacote da sua pasta (`f0304`, `f0506`, `f0708`, `f0910`, `f1112`). Use o `Terminal` para
+operar o app como um usuário:
+
+```java
+package f0708;
+
+import static comum.Verifica.garantir;
+
+import comum.Contexto;
+import comum.Terminal;
+import io.cucumber.java.pt.Dado;
+import io.cucumber.java.pt.Quando;
+import io.cucumber.java.pt.Então;
+
+public class PrioridadeSteps {
+    private final Contexto contexto;
+
+    public PrioridadeSteps(Contexto contexto) {   // o Contexto é compartilhado entre todas as classes de steps
+        this.contexto = contexto;
+    }
+
+    @Dado("que eu abri o TockTock")
+    public void abrir() throws java.io.IOException {
+        contexto.terminal = new Terminal();
+    }
+    // ...
+}
 ```
 
-Depois implemente os passos (Step Definitions) no pacote `bdd`, usando as anotações em português
-(`io.cucumber.java.pt.Dado`, `Quando`, `Então`). A classe `RunCucumberTest` já está pronta e roda todos os `.feature` da pasta.
+API do `Terminal` (em `comum/steps/Terminal.java`):
 
-### 2. TDD — Red → Green → Refactor
+| Método | O que faz |
+|---|---|
+| `escolher("Salvar")` | escolhe a opção pelo rótulo (`[S] Salvar`) |
+| `preencher("nome", "Estudar")` | escolhe "Definir nome" e digita o valor (vale para campos extras: `preencher("prioridade", "Alta")`) |
+| `abrirTarefa("Estudar")` | abre a tarefa pelo nome na lista |
+| `tarefas()` | mapa nome → linha (`numero()`, `data()`, `colunas()`, `mostra("Alta")`) |
+| `nomesDasTarefas()` | nomes na ordem exibida |
+| `tela()`, `titulo()`, `opcoes()` | texto da tela atual |
 
-Os testes unitários ficam no pacote `tdd`. Para cada regra:
+Steps genéricos já prontos em inglês (`comum/steps/AppSteps.java`): `I have opened the app`,
+`I select the {string} option`, `I must see the task {string} in the list`, etc.
+**Não redefina** um passo que já existe (o Cucumber acusa passo duplicado).
 
-1. 🔴 **Red:** escreva um teste que falha e rode-o. **Tire print da falha.**
-2. 🟢 **Green:** escreva o mínimo de código em `src/main/java` para o teste passar. **Tire print do teste passando.**
-3. 🔵 **Refactor:** melhore o código mantendo os testes verdes. **Tire print.**
+### 3. Código do app (`app/`)
 
-Salve os prints em `evidencias/` com o padrão `F07-01-red.png`, `F07-01-green.png`, `F07-01-refactor.png`, …
-Eles vão direto para o **relatório dos passos do TDD**.
+Crie um arquivo `.py` na pasta `app/` da sua pasta. Ele é carregado sozinho, sem editar o núcleo.
+Registre o que a sua funcionalidade precisa em `tocktock.extensoes`:
 
-### 3. Commits
+| Decorador / função | Para quê |
+|---|---|
+| `@ext.opcao_inicio` | nova opção na tela inicial: `return {"P": ("Filtrar por prioridade", acao)}` |
+| `@ext.opcao_tarefa` | nova opção na tela de uma tarefa (ex.: Concluir, Excluir) |
+| `ext.campo(chave, rotulo, pergunta, padrao)` | novo campo no formulário de tarefa (vira "Definir ...") |
+| `@ext.validacao` | `(valores, tarefa)` → `raise ValueError("mensagem")` recusa o salvamento e mostra `Erro: mensagem` |
+| `@ext.coluna` | `(tarefa)` → texto extra na linha da lista (`1. Nome \| data \| Alta`) |
+| `@ext.visao` | `(tarefas, app)` → ordena ou filtra a lista da tela inicial |
+| `@ext.linhas_inicio` | `(app)` → linhas extras no topo da tela inicial (ex.: `Filtro: Alta`) |
+| `@ext.apos_salvar` | `(tarefa, app)` → executa algo depois de salvar |
 
-Faça um commit por passo do ciclo, assim o histórico também vira evidência:
+Os dados extras de cada tarefa ficam em `tarefa.campos` (ex.: `tarefa.campos["prioridade"]`).
+O estado das telas (filtros, ordenação) fica em `app.estado`, usando chaves com o código da sua funcionalidade.
+Veja o exemplo completo em `F01-F02-luiz-dias/app/f0102_criar_editar.py`.
 
-| Tipo | Quando usar | Exemplo |
-|---|---|---|
-| `bdd` | cenários e step definitions | `bdd(F07): cenários de prioridade padrão e inválida` |
-| `test` | 🔴 teste novo que falha | `test(F07): RED - prioridade padrão deve ser Média` |
-| `feat` | 🟢 código que faz o teste passar | `feat(F07): GREEN - define Média como prioridade padrão` |
-| `refactor` | 🔵 melhoria sem mudar comportamento | `refactor(F07): extrai enum Prioridade` |
-| `docs` | README, evidências | `docs(F07): adiciona prints do ciclo 1` |
+### Convenções para não haver conflito
+
+| Item | Convenção |
+|---|---|
+| Teclas usadas | Início: `N` (F01). Tarefa: `E` (F02). Combine no grupo antes de usar uma tecla nova; o app acusa tecla repetida. |
+| Status de conclusão (F05) | `tarefa.campos["concluida"]` (`True`/`False`). F07 e F08 leem esse campo. |
+| Datas | Texto no formato `dd/mm/aaaa`, como no F01. |
+
+---
+
+## Fluxo BDD + TDD
+
+1. **Cenários** em `features/` → commit `bdd(F07): cenários ...`
+2. **Steps** em `steps/` → rode `./cucumber.sh <sua-pasta>`: os cenários falham. **🔴 RED** → print + commit.
+3. **Código mínimo** em `app/` para passar → **🟢 GREEN** → print + commit.
+4. **Refatoração** mantendo tudo verde → **🔵 REFACTOR** → print + commit.
+5. Repita por cenário/regra. Salve os prints em `evidencias/` (`F07-C01-red.png`, `F07-C01-green.png`, ...).
+
+---
+
+## Git
 
 ```bash
-git add F07-F08-joao-reis/
-git commit -m "test(F07): RED - prioridade padrão deve ser Média"
+git checkout main && git pull
+git checkout <sua-branch>
+git merge main                    # traz o núcleo e a infraestrutura atualizados
+git add <sua-pasta>/              # nunca use "git add ." nem "git commit -a"
+git status                        # só arquivos da sua pasta
+git commit -m "..."
 git push
 ```
 
-### 4. Rodar os testes
-
-```bash
-mvn -pl F07-F08-joao-reis test     # só a sua pasta
-mvn test                           # o projeto inteiro
-```
-
-O relatório HTML do Cucumber é gerado em `<sua-pasta>/target/cucumber-report.html`.
-No IntelliJ também dá para rodar clicando no ▶ ao lado da classe de teste ou do cenário.
-
-### 5. Juntar na main (Pull Request)
-
-Quando a sua parte estiver pronta e com todos os testes passando:
-
-```bash
-git checkout main && git pull          # pega o que já foi integrado
-git checkout joao-reis
-git merge main                         # traz a main para a sua branch
-mvn test                               # confere se tudo continua passando
-git push
-```
-
-Abra um **Pull Request** da sua branch para a `main` no GitHub. Outro integrante revisa e faz o merge.
-
----
-
-## Regras de convivência
-
-- ✅ Mexa **apenas na sua pasta**.
-- 🚫 **Não altere** o `pom.xml` da raiz nem o `README.md` principal na sua branch. Precisa de alguma mudança? Avise no grupo.
-- 🚫 Nunca faça commit direto na `main`; tudo entra por Pull Request.
-- 🚫 Não suba a pasta `target/` nem arquivos do IntelliJ (`.idea/`), o `.gitignore` já cuida disso.
-- ✅ Só abra PR com `mvn test` passando.
-
----
-
-## Entregáveis (15/11/2026, no AVA)
-
-- Casos de teste BDD: arquivos `.feature` de todas as funcionalidades
-- Relatório dos passos do TDD: descrição e print de cada passo (pasta `evidencias/` de cada integrante)
-- Códigos gerados: código de produção e testes deste repositório
+Ao final, abra um Pull Request da sua branch para a `main`.

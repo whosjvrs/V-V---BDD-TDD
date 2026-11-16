@@ -1,6 +1,6 @@
-package steps;
+package comum;
 
-import static steps.Verifica.garantir;
+import static comum.Verifica.garantir;
 
 import io.cucumber.java.After;
 import io.cucumber.java.en.Given;

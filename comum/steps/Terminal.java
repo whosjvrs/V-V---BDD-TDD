@@ -1,6 +1,6 @@
-package steps;
+package comum;
 
-import static steps.Verifica.garantir;
+import static comum.Verifica.garantir;
 
 import java.io.IOException;
 import java.io.InputStreamReader;
@@ -8,7 +8,9 @@ import java.io.OutputStreamWriter;
 import java.io.Reader;
 import java.io.Writer;
 import java.nio.charset.StandardCharsets;
+import java.util.Arrays;
 import java.util.LinkedHashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.concurrent.TimeUnit;
 import java.util.regex.Matcher;
@@ -20,7 +22,13 @@ public class Terminal {
     private static final String PROMPT = "\n> ";
     private static final long ESPERA_MS = 5000;
 
-    public record LinhaTarefa(String numero, String data) {}
+    /** Uma linha da lista de tarefas: "1. Nome | data | coluna extra | ...". */
+    public record LinhaTarefa(String numero, String data, List<String> colunas) {
+        /** Diz se alguma coluna extra (depois da data) é exatamente igual ao texto. */
+        public boolean mostra(String texto) {
+            return colunas.contains(texto);
+        }
+    }
 
     private final Process processo;
     private final Writer entrada;
@@ -64,10 +72,21 @@ public class Terminal {
         tela.lines()
                 .map(linha -> TAREFA.matcher(linha.strip()))
                 .filter(Matcher::matches)
-                .forEach(achou -> tarefas.put(
-                        achou.group(2),
-                        new LinhaTarefa(achou.group(1), achou.group(3) == null ? "" : achou.group(3))));
+                .forEach(achou -> tarefas.put(achou.group(2), linhaTarefa(achou)));
         return tarefas;
+    }
+
+    /** Nomes das tarefas na ordem em que aparecem na lista. */
+    public List<String> nomesDasTarefas() {
+        return List.copyOf(tarefas().keySet());
+    }
+
+    private static LinhaTarefa linhaTarefa(Matcher achou) {
+        String resto = achou.group(3) == null ? "" : achou.group(3);
+        List<String> partes = Arrays.asList(resto.split(" \\| ", -1));
+        String data = partes.isEmpty() ? "" : partes.get(0);
+        List<String> colunas = partes.size() > 1 ? List.copyOf(partes.subList(1, partes.size())) : List.of();
+        return new LinhaTarefa(achou.group(1), data, colunas);
     }
 
     public void digitar(String texto) {

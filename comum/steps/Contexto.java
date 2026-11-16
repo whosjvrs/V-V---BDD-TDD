@@ -1,5 +1,5 @@
-package steps;
+package comum;
 
 public class Contexto {
-    Terminal terminal;
+    public Terminal terminal;
 }

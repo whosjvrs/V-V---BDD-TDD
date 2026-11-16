@@ -1,3 +1,6 @@
+from tocktock import extensoes as ext
+
+
 class Tela:
     titulo = ""
 
@@ -26,14 +29,22 @@ class Tela:
 class TelaInicio(Tela):
     titulo = "Início"
 
+    def tarefas_visiveis(self):
+        tarefas = self.app.gerenciador.listar()
+        for visao in ext.VISOES:
+            tarefas = visao(tarefas, self.app)
+        return tarefas
+
     def linhas(self):
-        return [
-            f"{numero}. {tarefa.nome} | {tarefa.data}"
-            for numero, tarefa in enumerate(self.app.gerenciador.listar(), start=1)
+        extras = [linha for fonte in ext.LINHAS_INICIO for linha in fonte(self.app)]
+        tarefas = [
+            f"{numero}. {formatar_tarefa(tarefa)}"
+            for numero, tarefa in enumerate(self.tarefas_visiveis(), start=1)
         ]
+        return extras + tarefas
 
     def opcoes(self):
-        return {"N": ("Criar nova tarefa", self.criar_tarefa)}
+        return ext.juntar_opcoes(ext.OPCOES_INICIO, self)
 
     def receber(self, entrada):
         tarefa = self.tarefa_pelo_numero(entrada)
@@ -43,13 +54,15 @@ class TelaInicio(Tela):
             super().receber(entrada)
 
     def tarefa_pelo_numero(self, entrada):
-        tarefas = self.app.gerenciador.listar()
+        tarefas = self.tarefas_visiveis()
         if entrada.isdecimal() and 1 <= int(entrada) <= len(tarefas):
             return tarefas[int(entrada) - 1]
         return None
 
-    def criar_tarefa(self):
-        self.app.ir_para(TelaFormulario(self.app, "Nova tarefa", self.app.gerenciador.criar))
+
+def formatar_tarefa(tarefa):
+    colunas = [tarefa.data] + [c for c in (coluna(tarefa) for coluna in ext.COLUNAS) if c]
+    return " | ".join([tarefa.nome] + colunas)
 
 
 class TelaTarefa(Tela):
@@ -60,37 +73,56 @@ class TelaTarefa(Tela):
         self.tarefa = tarefa
 
     def opcoes(self):
-        return {"E": ("Editar", self.editar)}
-
-    def editar(self):
-        formulario = TelaFormulario(
-            self.app, "Editar tarefa", self.salvar_edicao, self.tarefa.nome, self.tarefa.data
-        )
-        self.app.ir_para(formulario)
-
-    def salvar_edicao(self, nome, data):
-        self.app.gerenciador.editar(self.tarefa, nome, data)
+        return ext.juntar_opcoes(ext.OPCOES_TAREFA, self)
 
 
 class TelaFormulario(Tela):
-    def __init__(self, app, titulo, ao_salvar, nome="", data=""):
+    """Formulário de tarefa: nome, data e os campos extras registrados pelas funcionalidades.
+
+    ``ao_salvar`` recebe um dicionário com todos os valores. ``tarefa`` é a tarefa
+    sendo editada (ou None ao criar) e é repassada às validações.
+    """
+
+    def __init__(self, app, titulo, ao_salvar, tarefa=None):
         super().__init__(app)
         self.titulo = titulo
         self.ao_salvar = ao_salvar
-        self.valores = {"nome": nome, "data": data}
+        self.tarefa = tarefa
+        self.erro = None
+        if tarefa is None:
+            self.valores = {"nome": "", "data": ""}
+            self.valores.update({c.chave: c.padrao for c in ext.CAMPOS})
+        else:
+            self.valores = {"nome": tarefa.nome, "data": tarefa.data}
+            self.valores.update({c.chave: tarefa.campos.get(c.chave, c.padrao) for c in ext.CAMPOS})
+
+    def linhas(self):
+        return [f"Erro: {self.erro}"] if self.erro else []
 
     def opcoes(self):
-        return {
+        opcoes = {
             "1": ("Definir nome", lambda: self.perguntar("nome", "Digite o nome da tarefa:")),
             "2": ("Definir data", lambda: self.perguntar("data", "Digite a data da tarefa:")),
-            "S": ("Salvar", self.salvar),
         }
+        for numero, campo in enumerate(ext.CAMPOS, start=3):
+            opcoes[str(numero)] = (
+                campo.rotulo, lambda campo=campo: self.perguntar(campo.chave, campo.pergunta))
+        opcoes["S"] = ("Salvar", self.salvar)
+        return opcoes
 
     def perguntar(self, campo, pergunta):
         self.app.ir_para(TelaPergunta(self, campo, pergunta))
 
     def salvar(self):
-        self.ao_salvar(**self.valores)
+        try:
+            for validar in ext.VALIDACOES:
+                validar(self.valores, self.tarefa)
+        except ValueError as erro:
+            self.erro = str(erro)
+            return
+        tarefa = self.ao_salvar(dict(self.valores))
+        for depois in ext.APOS_SALVAR:
+            depois(tarefa, self.app)
         self.app.voltar_ao_inicio()
 
 
@@ -106,4 +138,5 @@ class TelaPergunta(Tela):
 
     def receber(self, entrada):
         self.formulario.valores[self.campo] = entrada
+        self.formulario.erro = None
         self.app.ir_para(self.formulario)

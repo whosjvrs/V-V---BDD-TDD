@@ -1,4 +1,7 @@
-package steps;
+package f0102;
+
+import comum.Contexto;
+import comum.Terminal;
 
 import io.cucumber.java.en.Given;
 import io.cucumber.java.en.When;

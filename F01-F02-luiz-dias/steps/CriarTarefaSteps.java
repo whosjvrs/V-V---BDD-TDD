@@ -1,6 +1,9 @@
-package steps;
+package f0102;
 
-import static steps.Verifica.garantir;
+import comum.Contexto;
+import comum.Terminal;
+
+import static comum.Verifica.garantir;
 
 import io.cucumber.java.en.Given;
 import io.cucumber.java.en.Then;

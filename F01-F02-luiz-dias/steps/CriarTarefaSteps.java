@@ -22,12 +22,6 @@ public class CriarTarefaSteps {
                 "já existem tarefas na lista:\n" + contexto.terminal.tela());
     }
 
-    @When("I am on the main menu")
-    public void noMenuPrincipal() {
-        garantir(contexto.terminal.titulo().equals("TockTock - Início"),
-                "não estou no menu principal:\n" + contexto.terminal.tela());
-    }
-
     @Then("I must see the option {string}")
     public void verOpcao(String opcao) {
         garantir(contexto.terminal.opcoes().containsKey(opcao),

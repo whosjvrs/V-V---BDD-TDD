@@ -27,6 +27,12 @@ public class AppSteps {
         }
     }
 
+    @When("I am on the main menu")
+    public void noMenuPrincipal() {
+        garantir(contexto.terminal.titulo().equals("TockTock - Início"),
+                "não estou no menu principal:\n" + contexto.terminal.tela());
+    }
+
     @When("I select the {string} option")
     public void escolherOpcao(String opcao) {
         contexto.terminal.escolher(opcao);

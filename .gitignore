@@ -1,12 +1,18 @@
-# Maven
+# Build dos testes (jars baixados e classes compiladas pelo cucumber.sh)
+build/
+
+# Python
+__pycache__/
+*.pyc
+.venv/
+
+# Maven (estrutura antiga)
 target/
 
-# IntelliJ
+# IDEs
 .idea/
 *.iml
 out/
-
-# Eclipse / VS Code
 .classpath
 .project
 .settings/

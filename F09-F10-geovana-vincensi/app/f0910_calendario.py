@@ -1,8 +1,13 @@
 """F09 - Calendário e F10 - Filtro por período."""
+from calendar import monthrange
 from datetime import datetime
 
 from tocktock import extensoes as ext
 from tocktock.telas import Tela, TelaPergunta, formatar_tarefa
+
+
+def converter_data(texto, formato="%d/%m/%Y"):
+    return datetime.strptime(texto, formato).date()
 
 
 @ext.opcao_inicio
@@ -36,23 +41,26 @@ class TelaCalendario(Tela):
     def filtrar(self):
         self.consulta = "período"
 
+    def intervalo_consulta(self):
+        if self.consulta == "dia":
+            dia = converter_data(self.valores["dia"])
+            return dia, dia
+        if self.consulta == "mês":
+            inicio = converter_data(self.valores["mês"], "%m/%Y")
+            ultimo_dia = monthrange(inicio.year, inicio.month)[1]
+            return inicio, inicio.replace(day=ultimo_dia)
+        if self.consulta == "período":
+            return (converter_data(self.valores["data inicial"]),
+                    converter_data(self.valores["data final"]))
+        return None
+
     def linhas(self):
         tarefas = [t for t in self.app.gerenciador.listar() if t.data]
-        if self.consulta == "dia":
-            dia = datetime.strptime(self.valores["dia"], "%d/%m/%Y").date()
-            tarefas = [t for t in tarefas
-                       if datetime.strptime(t.data, "%d/%m/%Y").date() == dia]
-        elif self.consulta == "mês":
-            mes = datetime.strptime(self.valores["mês"], "%m/%Y")
-            tarefas = [t for t in tarefas
-                       if datetime.strptime(t.data, "%d/%m/%Y").strftime("%m/%Y")
-                       == mes.strftime("%m/%Y")]
-        elif self.consulta == "período":
-            inicio = datetime.strptime(self.valores["data inicial"], "%d/%m/%Y").date()
-            fim = datetime.strptime(self.valores["data final"], "%d/%m/%Y").date()
-            tarefas = [t for t in tarefas
-                       if inicio <= datetime.strptime(t.data, "%d/%m/%Y").date() <= fim]
-            if not tarefas:
-                return ["Nenhuma tarefa nesse intervalo"]
+        intervalo = self.intervalo_consulta()
+        if intervalo is not None:
+            inicio, fim = intervalo
+            tarefas = [t for t in tarefas if inicio <= converter_data(t.data) <= fim]
+        if self.consulta == "período" and not tarefas:
+            return ["Nenhuma tarefa nesse intervalo"]
         return [f"{numero}. {formatar_tarefa(tarefa)}"
                 for numero, tarefa in enumerate(tarefas, start=1)]

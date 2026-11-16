@@ -1,0 +1,36 @@
+F11 e F12 - RED
+Rafael Sato
+
+Primeiro escrevi os cenários das duas funcionalidades em Gherkin, na pasta
+features/. O F11 (criar lista) tem 4 cenários: nome único, nome repetido, nome
+vazio e nome só com espaços. O F12 (entrar em lista) tem 3: lista com tarefas,
+lista vazia e lista que só mostra as próprias tarefas.
+
+Depois automatizei os cenários com Cucumber, escrevendo as step definitions em
+Java na pasta steps/. Os steps abrem o app no terminal e usam ele como um
+usuário, escolhendo opções e digitando.
+
+Rodei os testes com ./cucumber.sh F11-F12-rafael-sato antes de escrever
+qualquer código do app. Como ainda não existia nada das funcionalidades, os 7
+cenários falharam, como se pode ver na evidência F11-F12-red-1.png:
+
+  7 scenarios (7 failed)
+  50 steps (24 passed, 19 skipped, 7 failed)
+
+Todos falham no primeiro passo que precisa de lista, porque a opção
+"Criar lista" não aparece na tela.
+
+
+F11 e F12 - GREEN
+
+Depois escrevi o código do app em app/f1112_listas.py, só o mínimo pra fazer
+os cenários passarem. Ele adiciona na tela inicial as opções "Criar lista" e
+"Entrar em lista" e mostra as listas criadas. Ao criar uma lista, mostra erro
+se o nome estiver vazio, só com espaços ou repetido. Dentro de uma lista,
+mostra só as tarefas dela, ou "This list has no tasks." se estiver vazia.
+
+Rodei de novo ./cucumber.sh F11-F12-rafael-sato e os 7 cenários passaram, como
+se pode ver na evidência F11-F12-green.png:
+
+  7 scenarios (7 passed)
+  50 steps (50 passed)

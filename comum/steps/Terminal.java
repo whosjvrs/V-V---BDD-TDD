@@ -18,7 +18,7 @@ import java.util.regex.Pattern;
 
 public class Terminal {
     private static final Pattern OPCAO = Pattern.compile("\\[(\\w+)\\] (.+)");
-    private static final Pattern TAREFA = Pattern.compile("(\\d+)\\. (.+?)(?: \\| (.*))?");
+    private static final Pattern TAREFA = Pattern.compile("(\\d+)\\. (.+?)(?: \\| ?(.*))?");
     private static final String PROMPT = "\n> ";
     private static final long ESPERA_MS = 5000;
 

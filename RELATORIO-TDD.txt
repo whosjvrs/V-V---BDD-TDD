@@ -1,0 +1,190 @@
+RELATÓRIO DOS PASSOS DO TDD - PROJETO TOCKTOCK
+Avaliação Somativa RA4 - Parte 1 - Verificação e Validação - PUCPR 2026/2
+Prof. Marcelo Bardi
+
+======================================================================
+COMO O CICLO FOI CONDUZIDO
+======================================================================
+
+Cada integrante seguiu o mesmo fluxo para as suas duas funcionalidades:
+
+  1. BDD   - escreveu os cenários em Gherkin (Dado/Quando/Então) em features/.
+  2. RED   - escreveu os step definitions (Java + Cucumber) em steps/ e rodou
+             ./cucumber.sh <pasta> ANTES de existir código no app: os cenários
+             falham porque as opções da funcionalidade não existem na tela.
+  3. GREEN - escreveu o código mínimo em app/ (Python) até os cenários passarem.
+  4. REFACTOR - melhorou o código mantendo todos os cenários verdes.
+
+Cada etapa tem um commit próprio no Git (git log mostra a ordem) e prints na
+pasta evidencias/ de cada integrante. Para reproduzir qualquer resultado:
+
+  ./cucumber.sh F07-F08-joao-reis          (troque pela pasta desejada)
+
+Resumo final da equipe (todos os cenários passando na branch main):
+
+  Integrante            Funcionalidades                     Cenários
+  Luiz Dias             F01 Criar / F02 Editar tarefa        2 + 1
+  Luiz Fernando Simm    F03 Visualizar / F04 Excluir         1 + 1
+  Tabatha Martins       F05 Conclusão / F06 Execução         4 + 3
+  João Victor dos Reis  F07 Prioridade / F08 Recorrência     4 + 3
+  Geovana Vincensi      F09 Calendário / F10 Filtro período  2 + 2
+  Rafael Sato           F11 Criar lista / F12 Entrar lista   4 + 3
+
+
+======================================================================
+F01 e F02 - LUIZ DIAS
+======================================================================
+
+Imagens de cada passo: F01-F02-luiz-dias/evidencias/
+
+RED
+  Cenários de criar (F01, 2 cenários) e editar tarefa (F02, 1 cenário)
+  escritos em Gherkin e automatizados com step definitions em Java que
+  operam o app no terminal. Executados antes do código, falham.
+
+GREEN
+  Código mínimo do app (menu inicial, formulário de nome e data, salvar e
+  editar). Os 3 cenários passam.
+
+REFACTOR
+  Separação do código em tarefa, gerenciador, telas e app, mantendo os
+  cenários verdes.
+
+Commits: bdd(F01-F02): cenários -> step definitions (RED) ->
+         GREEN dos cenários -> azul refatoração (separa tarefa, gerenciador,
+         telas e app)
+
+
+======================================================================
+F03 e F04 - LUIZ FERNANDO SIMM
+======================================================================
+
+RED (evidencias/RED/RED1.png)
+  Os testes das features 03 e 04 foram criados em Gherkin e automatizados com
+  Cucumber. Executados sem a implementação das features, retornaram falha.
+
+GREEN (evidencias/GREEN/GREEN1.png a GREEN4.png)
+  Implementação em app/f0304_visualizar_excluir.py (GREEN4.png). A interface
+  no terminal ganhou a tela de visualização e a opção de exclusão (GREEN1.png
+  e GREEN2.png); os testes passaram (GREEN3.png).
+
+REFACTOR (evidencias/REFACTOR/REFACTOR1.png a REFACTOR3.png)
+  Ajuste da exibição dos dados da tarefa, que passaram a aparecer separados
+  do bloco de opções (REFACTOR2.png); o botão de excluir segue o mesmo padrão
+  (REFACTOR1.png); os testes continuam aprovados (REFACTOR3.png).
+
+Descrições originais: evidencias/RED/Descrição, evidencias/GREEN/Descrição,
+evidencias/REFACTOR/Descrição
+
+
+======================================================================
+F05 e F06 - TABATHA MARTINS
+======================================================================
+
+RED (evidencias/F05-F06-red-1.png e F05-F06-red-2.png)
+  Cenários de status de conclusão (F05, 4 cenários) e de execução (F06,
+  3 cenários) automatizados com step definitions em Java. Executados antes do
+  código, falham porque as opções de status ainda não existem no app.
+
+GREEN (evidencias/F05-F06-green.png)
+  Código mínimo em app/f0506_status.py: opções para marcar a tarefa como
+  concluída/não concluída e farei/não farei. Os 7 cenários passam.
+
+REFACTOR (evidencias/F05-F06-refactor-1.png e F05-F06-refactor-2-diff.png)
+  As regras de status foram separadas das telas; o diff mostra a mudança e
+  os cenários continuam passando.
+
+
+======================================================================
+F07 e F08 - JOÃO VICTOR DOS REIS
+======================================================================
+
+F07 - PRIORIDADE DA TAREFA (4 cenários, 6 execuções)
+
+RED (evidencias/F07-01-red.png)  - commit 322e158
+  Step definitions em steps/PrioridadeSteps.java e TarefaSteps.java.
+  Resultado: 6 scenarios (6 failed). O primeiro cenário cria a tarefa mas a
+  lista não mostra a prioridade; os demais falham porque a opção
+  "Definir prioridade" não aparece no formulário.
+
+GREEN (evidencias/F07-02-green.png)  - commit 375713f
+  Código em app/f0708_prioridade.py: campo "Definir prioridade" (padrão
+  Média), validação "Prioridade inválida. Use Baixa, Média ou Alta.", coluna
+  "Prioridade: X" na lista e opção "Ordenar por prioridade".
+  Resultado: 6 scenarios (6 passed), 25 steps (25 passed).
+
+REFACTOR (evidencias/F07-03-refactor.png)  - commit 200f7c4
+  As listas repetidas viraram uma única constante PRIORIDADES (que também
+  define a ordenação), o padrão e a mensagem de erro viraram constantes e o
+  cálculo de ordenação foi para uma função própria.
+  Resultado: 6 scenarios (6 passed).
+
+F08 - TAREFA RECORRENTE (3 cenários, 8 execuções)
+
+RED (evidencias/F08-01-red.png)  - commit 3733123
+  Step definitions em steps/RecorrenciaSteps.java.
+  Resultado: 8 scenarios (8 failed), pois a opção "Definir recorrência" não
+  aparece no formulário.
+
+GREEN (evidencias/F08-02-green.png)  - commit 0e6f7ab
+  Código em app/f0708_recorrencia.py: campo de recorrência (Nenhuma, Diária,
+  Semanal, Mensal), validações (recorrência inválida, recorrente sem data) e
+  coluna "Próxima: dd/mm/aaaa", tratando fim de mês e ano bissexto
+  (31/01/2028 mensal -> 29/02/2028).
+  Resultado: 8 scenarios (8 passed).
+
+REFACTOR (evidencias/F08-03-refactor.png)  - commit ab9020d
+  O if/elif por recorrência virou uma tabela (dicionário) de funções, o
+  cálculo de "mesmo dia do mês seguinte" foi isolado em somar_um_mes() e as
+  mensagens viraram constantes.
+  Resultado: 8 scenarios (8 passed).
+
+FINAL (evidencias/F07-F08-final.png)
+  ./cucumber.sh F07-F08-joao-reis -> 14 scenarios (14 passed),
+  59 steps (59 passed), e o app mostrando
+  "1. Academia | 31/01/2028 | Prioridade: Alta | Próxima: 29/02/2028".
+
+
+======================================================================
+F09 e F10 - GEOVANA VINCENSI
+======================================================================
+
+RED (evidencias/RED_01_erros_base_python_ausente.png,
+     RED_02_resumo_execucao_falha.png e RED-infraestrutura.log)
+  Testes automatizados de F09 (exibição no calendário) e F10 (filtro por
+  período) escritos e executados antes do código; a execução falha.
+  Notas da preparação em referencias/execucao-red.md.
+
+GREEN (evidencias/GREEN_01_codigo_minimo_parte1.png e parte2,
+       GREEN_02_testes_passando_parte1.png e parte2)
+  Implementação mínima do calendário e do filtro de datas em
+  app/f0910_calendario.py; os cenários passam.
+
+REFACTOR / BLUE (evidencias/BLUE_01_codigo_refatorado_parte1.png a parte3,
+                 BLUE_02_testes_passando.png)
+  Refatoração do calendário e do filtro de datas, com os testes continuando
+  aprovados.
+
+
+======================================================================
+F11 e F12 - RAFAEL SATO
+======================================================================
+
+Descrição completa em F11-F12-rafael-sato/evidencias/descricao.txt
+
+RED (evidencias/F11-F12-red-1.png)
+  Cenários em Gherkin (F11: 4 cenários - nome único, repetido, vazio e só
+  com espaços; F12: 3 cenários - lista com tarefas, vazia e só as próprias
+  tarefas) automatizados com Cucumber. Antes de existir código, os 7
+  cenários falharam: 7 scenarios (7 failed), porque a opção "Criar lista"
+  não aparece na tela.
+
+GREEN (evidencias/F11-F12-green.png)
+  Código mínimo em app/f1112_listas.py: opções "Criar lista" e "Entrar em
+  lista", validação do nome e listagem das tarefas da lista.
+  Resultado: 7 scenarios (7 passed), 50 steps (50 passed).
+
+REFACTOR (evidencias/F11-F12-refactor-1.png)
+  Mensagens viraram constantes, a validação do nome foi para uma função
+  própria e a tarefa passou a guardar a lista em tarefa.campos["lista"].
+  Resultado: 7 scenarios (7 passed).
